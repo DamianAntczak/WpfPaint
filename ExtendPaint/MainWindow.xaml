@@ -1,0 +1,18 @@
+﻿<Window x:Class="ExtendPaint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExtendPaint"
+        mc:Ignorable="d"
+        Title="ExtendPaint" Height="350" Width="525">
+        <DockPanel LastChildFill="True">
+            <StackPanel Width="60" >
+                <Button Name="bRed" Height="30" Background="Red" Click="bRed_Click"></Button>
+                <Button Name="bYellow" Height="30" Background="Yellow" Click="bYellow_Click"></Button>
+                <Button Name="bBlue" Height="30" Background="Blue"></Button>
+            <Slider Name="sBrushThickness" Minimum="1" Maximum="15" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sBrushThickness_ValueChanged"></Slider>
+            </StackPanel>
+            <Canvas Name="mainCanvas" MouseDown="mainCanvas_MouseDown" MouseMove="mainCanvas_MouseMove"></Canvas>
+        </DockPanel>
+</Window>
