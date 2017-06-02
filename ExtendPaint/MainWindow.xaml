@@ -7,12 +7,31 @@
         mc:Ignorable="d"
         Title="ExtendPaint" Height="350" Width="525">
         <DockPanel LastChildFill="True">
-            <StackPanel Width="60" >
-                <Button Name="bRed" Height="30" Background="Red" Click="bRed_Click"></Button>
-                <Button Name="bYellow" Height="30" Background="Yellow" Click="bYellow_Click"></Button>
-                <Button Name="bBlue" Height="30" Background="Blue"></Button>
-            <Slider Name="sBrushThickness" Minimum="1" Maximum="15" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sBrushThickness_ValueChanged"></Slider>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Height="90">
+                <StackPanel Width="60" >
+                    <Button Name="bRed" Height="30" Background="Red" Click="bColor_Click"></Button>
+                    <Button Name="bYellow" Height="30" Background="Yellow" Click="bColor_Click"></Button>
+                    <Button Name="bBlue" Height="30" Background="Blue" Click="bColor_Click"></Button>
+                </StackPanel>
+                <StackPanel Width="60" >
+                    <Button Name="bGreen" Height="30" Background="Green" Click="bColor_Click"></Button>
+                    <Button Name="bBlack" Height="30" Background="Black" Click="bColor_Click"></Button>
+                    <Button Name="bWhite" Height="30" Background="White" Click="bColor_Click"></Button>
+                </StackPanel>
             </StackPanel>
-            <Canvas Name="mainCanvas" MouseDown="mainCanvas_MouseDown" MouseMove="mainCanvas_MouseMove"></Canvas>
+            <Rectangle Name="rColor" Height="30">
+            </Rectangle>
+            <Slider Name="sBrushThickness" Minimum="1" Maximum="15" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sBrushThickness_ValueChanged"></Slider>
+        </StackPanel>
+            
+            <Canvas Name="mainCanvas" MouseDown="mainCanvas_MouseDown" MouseMove="mainCanvas_MouseMove">
+            <Canvas.CacheMode>
+                <BitmapCache 
+                EnableClearType="False" 
+                SnapsToDevicePixels="False"
+                RenderAtScale="2"/>
+            </Canvas.CacheMode>
+        </Canvas>
         </DockPanel>
 </Window>

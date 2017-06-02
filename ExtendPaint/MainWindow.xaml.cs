@@ -21,7 +21,7 @@ namespace ExtendPaint
     public partial class MainWindow : Window
     {
         Point currentPoint = new Point();
-        SolidColorBrush currentBrush = Brushes.Black;
+        Brush currentBrush = Brushes.Black;
         int currentBrushThickness = 1;
 
 
@@ -35,6 +35,7 @@ namespace ExtendPaint
         {
             mainCanvas.Background = Brushes.LightBlue;
             sBrushThickness.Value = currentBrushThickness;
+            rColor.Fill = currentBrush;
 
         }
 
@@ -65,19 +66,16 @@ namespace ExtendPaint
             }
         }
 
-        private void bRed_Click(object sender, RoutedEventArgs e)
-        {
-            currentBrush = Brushes.Red;
-        }
-
-        private void bYellow_Click(object sender, RoutedEventArgs e)
-        {
-            currentBrush = Brushes.Yellow;
-        }
-
         private void sBrushThickness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             currentBrushThickness = (int)e.NewValue;
+        }
+
+        private void bColor_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            currentBrush = button.Background.Clone();
+            rColor.Fill = currentBrush;
         }
     }
 }
