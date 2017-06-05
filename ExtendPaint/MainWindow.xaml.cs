@@ -20,9 +20,12 @@ namespace ExtendPaint
     /// </summary>
     public partial class MainWindow : Window
     {
-        Point currentPoint = new Point();
+        Point startPoint = new Point();
+        //Point currentPoint = new Point();
+        Shape currentShape = null;
         Brush currentBrush = Brushes.Black;
         int currentBrushThickness = 1;
+        bool isLine = false;
 
 
         public MainWindow()
@@ -42,28 +45,46 @@ namespace ExtendPaint
         private void mainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
-                currentPoint = e.GetPosition(mainCanvas);
+                currentShape = new Line();
+                startPoint = e.GetPosition(mainCanvas);
         }
 
         private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.LeftButton == MouseButtonState.Pressed)
             {
-                Line line = new Line();
+                mainCanvas.Children.Remove(currentShape);
 
-                line.Stroke = currentBrush;
-                line.StrokeThickness = currentBrushThickness;
-                line.StrokeStartLineCap = PenLineCap.Round;
-                line.StrokeStartLineCap = PenLineCap.Round;
-                line.X1 = currentPoint.X;
-                line.Y1 = currentPoint.Y;
-                line.X2 = e.GetPosition(mainCanvas).X;
-                line.Y2 = e.GetPosition(mainCanvas).Y;
+                if (isLine) {
+                    Line line = new Line();
+                    line.Stroke = currentBrush;
+                    line.StrokeThickness = currentBrushThickness;
+                    line.StrokeStartLineCap = PenLineCap.Round;
+                    line.StrokeStartLineCap = PenLineCap.Round;
+                    line.X1 = startPoint.X;
+                    line.Y1 = startPoint.Y;
+                    line.X2 = e.GetPosition(mainCanvas).X;
+                    line.Y2 = e.GetPosition(mainCanvas).Y;
 
-                currentPoint = e.GetPosition(mainCanvas);
+                    mainCanvas.Children.Add(line);
+                    currentShape = line;
+                }
+                else
+                {
+                    Rectangle rect = new Rectangle();
+                    rect.Width = Math.Abs(startPoint.X - e.GetPosition(mainCanvas).X);
+                    rect.Height = Math.Abs(startPoint.Y - e.GetPosition(mainCanvas).Y);
+                    rect.Stroke = currentBrush;
+                    rect.StrokeThickness = currentBrushThickness;
 
-                mainCanvas.Children.Add(line);
+                    Canvas.SetLeft(rect, startPoint.X);
+                    Canvas.SetTop(rect, startPoint.Y);
+
+                    mainCanvas.Children.Add(rect);
+                    currentShape = rect;
+                }
             }
+
         }
 
         private void sBrushThickness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
