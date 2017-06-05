@@ -77,8 +77,22 @@ namespace ExtendPaint
                     rect.Stroke = currentBrush;
                     rect.StrokeThickness = currentBrushThickness;
 
-                    Canvas.SetLeft(rect, startPoint.X);
-                    Canvas.SetTop(rect, startPoint.Y);
+                    if(startPoint.X - e.GetPosition(mainCanvas).X > 0) {
+                        Canvas.SetLeft(rect, startPoint.X - rect.Width);
+                    }
+                    else
+                    {
+                        Canvas.SetLeft(rect, startPoint.X);
+                    }
+
+                    if (startPoint.Y - e.GetPosition(mainCanvas).Y > 0)
+                    {
+                        Canvas.SetTop(rect, startPoint.Y - rect.Height);
+                    }
+                    else
+                    {
+                        Canvas.SetTop(rect, startPoint.Y);
+                    }
 
                     mainCanvas.Children.Add(rect);
                     currentShape = rect;
