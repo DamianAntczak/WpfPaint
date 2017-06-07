@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
 namespace ExtendPaint
@@ -33,6 +34,34 @@ namespace ExtendPaint
         public void UnExecute()
         {
             canvas.Children.Remove(this.shape);
+        }
+    }
+
+    public class EffectCommand : ICommand
+    {
+        private Effect effect;
+        private Canvas canvas;
+
+        public EffectCommand(Effect effect, Canvas canvas)
+        {
+            this.canvas = canvas;
+            this.effect = effect;
+        }
+
+        public void Execute()
+        {
+            foreach (Shape children in canvas.Children)
+            {
+                children.Effect = effect;
+            }
+        }
+
+        public void UnExecute()
+        {
+            foreach (Shape children in canvas.Children)
+            {
+                children.Effect = null;
+            }
         }
     }
 }

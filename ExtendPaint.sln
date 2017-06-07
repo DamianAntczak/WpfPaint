@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendPaint", "ExtendPaint\ExtendPaint.csproj", "{BBD75EEB-398F-41B7-8A6F-F6396A64FDA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "PluginInterface\PluginInterface.csproj", "{828A0289-1B12-4DC3-8A3D-26E367F25D2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlurEffectPlugin", "BlurEffect\BlurEffectPlugin.csproj", "{0507D509-6949-49A1-8490-54270075CB3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowEffectPlugin", "ShadowEffectPlugin\ShadowEffectPlugin.csproj", "{A519E711-DDDB-4146-AE60-B10DF88C3985}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{BBD75EEB-398F-41B7-8A6F-F6396A64FDA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBD75EEB-398F-41B7-8A6F-F6396A64FDA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBD75EEB-398F-41B7-8A6F-F6396A64FDA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{828A0289-1B12-4DC3-8A3D-26E367F25D2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{828A0289-1B12-4DC3-8A3D-26E367F25D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{828A0289-1B12-4DC3-8A3D-26E367F25D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{828A0289-1B12-4DC3-8A3D-26E367F25D2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0507D509-6949-49A1-8490-54270075CB3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0507D509-6949-49A1-8490-54270075CB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0507D509-6949-49A1-8490-54270075CB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0507D509-6949-49A1-8490-54270075CB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A519E711-DDDB-4146-AE60-B10DF88C3985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A519E711-DDDB-4146-AE60-B10DF88C3985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A519E711-DDDB-4146-AE60-B10DF88C3985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A519E711-DDDB-4146-AE60-B10DF88C3985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

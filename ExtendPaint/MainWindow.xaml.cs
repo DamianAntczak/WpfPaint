@@ -1,6 +1,9 @@
-﻿using System;
+﻿using PluginInterface;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -30,13 +34,13 @@ namespace ExtendPaint
         MouseButtonState previousMouseEvent = new MouseButtonState();
         UndoRedoProvider undoRedo = new UndoRedoProvider();
         int currentBrushThickness = 1;
-        bool isLine = false;
 
 
         public MainWindow()
         {
             InitializeComponent();
             CanvasInit();
+            loadPlugins();
         }
 
         public void CanvasInit()
@@ -44,6 +48,7 @@ namespace ExtendPaint
             mainCanvas.Background = Brushes.LightBlue;
             sBrushThickness.Value = currentBrushThickness;
             rColor.Fill = currentBrush;
+            //getCanvasBitmap();
 
         }
 
@@ -165,5 +170,83 @@ namespace ExtendPaint
             currentTool = ToolType.Rect;
         }
 
+        private void getCanvasBitmap()
+        {
+            
+        }
+
+        private RenderTargetBitmap CreateBitmap(Canvas canvas)
+        {
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+             (int)canvas.ActualWidth, (int)canvas.ActualHeight,
+             96d, 96d, PixelFormats.Pbgra32);
+            // needed otherwise the image output is black
+            canvas.Measure(new Size((int)canvas.ActualWidth, (int)canvas.ActualHeight));
+            canvas.Arrange(new Rect(new Size((int)canvas.ActualWidth, (int)canvas.ActualHeight)));
+
+            renderBitmap.Render(canvas);
+            return renderBitmap;
+        }
+
+        private void testEffects_Click(object sender, RoutedEventArgs e)
+        {
+            //this.CreateBitmap(mainCanvas);
+            DropShadowEffect effect = new DropShadowEffect();
+            effect.Direction = 320;
+            effect.ShadowDepth = 25;
+            effect.Color = Color.FromRgb(122, 122, 122);
+            effect.Opacity = 1;
+
+            BlurEffect blur = new BlurEffect();
+            blur.Radius = 15;
+
+
+            EffectCommand command = new EffectCommand(blur, mainCanvas);
+            undoRedo.InsertComand(command);
+            command.Execute();
+        }
+
+        private void loadPlugins()
+        {
+            try
+            {
+                foreach (string dll in Directory.GetFiles("./plugins", "*.dll"))
+                {
+                    Assembly assembly = Assembly.LoadFrom(dll);
+                    foreach (Type type in assembly.GetTypes())
+                    {
+
+                        toolBar.Items.Add(new Separator());
+                        if (type.IsClass && type.IsPublic && typeof(IPlugin).IsAssignableFrom(type))
+                        {
+                            Object obj = Activator.CreateInstance(type);
+                            IPlugin plugin = (IPlugin)obj;
+
+                            Effect effect = plugin.getEffect();
+                            EffectCommand command = new EffectCommand(effect, mainCanvas);
+
+                            Button pluginButton = plugin.getPluginButton();
+                            pluginButton.DataContext = command;
+                            pluginButton.Click += pluginButton_Click;
+
+                            toolBar.Items.Add(pluginButton);
+                        }
+
+                    }
+                }
+            }
+            catch(DirectoryNotFoundException e)
+            {
+                MessageBox.Show("No plugins");
+            }
+        }
+
+        private void pluginButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button senderButton = sender as Button;
+            EffectCommand command = senderButton.DataContext as EffectCommand;
+            undoRedo.InsertComand(command);
+            command.Execute();
+        }
     }
 }

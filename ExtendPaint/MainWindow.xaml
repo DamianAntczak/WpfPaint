@@ -7,11 +7,15 @@
         mc:Ignorable="d"
         Title="ExtendPaint" Height="350" Width="525">
         <DockPanel LastChildFill="True">
-        <StackPanel>
-            <StackPanel Orientation="Horizontal" Height="30">
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar Name="toolBar">
                 <Button Name="bUndo" Content="Cofnij" Width="60" Click="bUndo_Click"></Button>
                 <Button Name="bRedo" Content="Powtórz" Width="60" Click="bRedo_Click"></Button>
-            </StackPanel>
+                <Separator></Separator>
+                <Button Name="testEffects" Content="Effect" Click="testEffects_Click" Visibility="Hidden" VerticalAlignment="Stretch"></Button>
+            </ToolBar>
+        </ToolBarTray>
+        <StackPanel>
             <StackPanel Orientation="Horizontal" Height="90">
                 <StackPanel Width="60" >
                     <Button Name="bRed" Height="30" Background="Red" Click="bColor_Click"></Button>
