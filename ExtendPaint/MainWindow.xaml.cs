@@ -45,7 +45,7 @@ namespace ExtendPaint
 
         public void CanvasInit()
         {
-            mainCanvas.Background = Brushes.LightBlue;
+            mainCanvas.Background = Brushes.White;
             sBrushThickness.Value = currentBrushThickness;
             rColor.Fill = currentBrush;
             //getCanvasBitmap();
@@ -72,6 +72,9 @@ namespace ExtendPaint
                         break;
                     case ToolType.Rect:
                         drawRect(e);
+                        break;
+                    case ToolType.Ellipse:
+                        drawEllipse(e);
                         break;
                 }
             }
@@ -107,6 +110,11 @@ namespace ExtendPaint
             rect.Stroke = currentBrush;
             rect.StrokeThickness = currentBrushThickness;
 
+            if (cbFillShape.IsChecked == true)
+            {
+                rect.Fill = currentBrush;
+            }
+
             if (startPoint.X - e.GetPosition(mainCanvas).X > 0)
             {
                 Canvas.SetLeft(rect, startPoint.X - rect.Width);
@@ -129,6 +137,41 @@ namespace ExtendPaint
             currentShape = rect;
         }
 
+        private void drawEllipse(MouseEventArgs e)
+        {
+            Ellipse ellipse = new Ellipse();
+            ellipse.Width = Math.Abs(startPoint.X - e.GetPosition(mainCanvas).X);
+            ellipse.Height = Math.Abs(startPoint.Y - e.GetPosition(mainCanvas).Y);
+            ellipse.Stroke = currentBrush;
+            ellipse.StrokeThickness = currentBrushThickness;
+
+            if (cbFillShape.IsChecked == true)
+            {
+                ellipse.Fill = currentBrush;
+            }
+
+            if (startPoint.X - e.GetPosition(mainCanvas).X > 0)
+            {
+                Canvas.SetLeft(ellipse, startPoint.X - ellipse.Width);
+            }
+            else
+            {
+                Canvas.SetLeft(ellipse, startPoint.X);
+            }
+
+            if (startPoint.Y - e.GetPosition(mainCanvas).Y > 0)
+            {
+                Canvas.SetTop(ellipse, startPoint.Y - ellipse.Height);
+            }
+            else
+            {
+                Canvas.SetTop(ellipse, startPoint.Y);
+            }
+
+            mainCanvas.Children.Add(ellipse);
+            currentShape = ellipse;
+        }
+
         private void mainCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -147,6 +190,11 @@ namespace ExtendPaint
             Button button = (Button)sender;
             currentBrush = button.Background.Clone();
             rColor.Fill = currentBrush;
+            SolidColorBrush colorBrush = (SolidColorBrush)currentBrush;
+            
+            sRed.Value = colorBrush.Color.R;
+            sGreen.Value = colorBrush.Color.G;
+            sBlue.Value = colorBrush.Color.B;
         }
 
         private void bUndo_Click(object sender, RoutedEventArgs e)
@@ -175,7 +223,7 @@ namespace ExtendPaint
             
         }
 
-        private RenderTargetBitmap CreateBitmap(Canvas canvas)
+        private void SaveBitmap(Canvas canvas)
         {
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
              (int)canvas.ActualWidth, (int)canvas.ActualHeight,
@@ -185,8 +233,42 @@ namespace ExtendPaint
             canvas.Arrange(new Rect(new Size((int)canvas.ActualWidth, (int)canvas.ActualHeight)));
 
             renderBitmap.Render(canvas);
-            return renderBitmap;
+
+
+
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog()
+            {
+                Filter = "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|All(*.*)|*",
+                FileName = "picture",
+                DefaultExt = "png"
+            };
+            var DialougeResult = dialog.ShowDialog();
+
+            if (DialougeResult == true)
+            {
+                var extension = System.IO.Path.GetExtension(dialog.FileName);
+                using (FileStream file = File.Create(dialog.FileName))
+                {
+                    BitmapEncoder encoder = null;
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            encoder = new JpegBitmapEncoder();
+                            break;
+                        case ".png":
+                            encoder = new PngBitmapEncoder();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(extension);
+                    }
+                    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                    encoder.Save(file);
+                    InvalidateVisual();
+                }
+            }
+          
         }
+    
 
         private void testEffects_Click(object sender, RoutedEventArgs e)
         {
@@ -247,6 +329,31 @@ namespace ExtendPaint
             EffectCommand command = senderButton.DataContext as EffectCommand;
             undoRedo.InsertComand(command);
             command.Execute();
+        }
+
+        private void saveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveBitmap(mainCanvas);
+        }
+
+        private void bElipse_Click(object sender, RoutedEventArgs e)
+        {
+            currentTool = ToolType.Ellipse;
+        }
+
+        private void bFill_Click(object sender, RoutedEventArgs e)
+        {
+            FillCommand command = new FillCommand(this.currentBrush, this.mainCanvas);
+            undoRedo.InsertComand(command);
+            command.Execute();
+        }
+
+        private void sColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = Color.FromRgb((byte)sRed.Value, (byte)sGreen.Value, (byte)sBlue.Value);
+            currentBrush = brush;
+            rColor.Fill = currentBrush;
         }
     }
 }

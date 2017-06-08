@@ -5,45 +5,70 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExtendPaint"
         mc:Ignorable="d"
-        Title="ExtendPaint" Height="350" Width="525">
+        Title="ExtendPaint" Height="600" Width="800">
+        
         <DockPanel LastChildFill="True">
-        <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar Name="toolBar">
-                <Button Name="bUndo" Content="Cofnij" Width="60" Click="bUndo_Click"></Button>
-                <Button Name="bRedo" Content="Powtórz" Width="60" Click="bRedo_Click"></Button>
-                <Separator></Separator>
-                <Button Name="testEffects" Content="Effect" Click="testEffects_Click" Visibility="Hidden" VerticalAlignment="Stretch"></Button>
-            </ToolBar>
-        </ToolBarTray>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal" Height="90">
-                <StackPanel Width="60" >
-                    <Button Name="bRed" Height="30" Background="Red" Click="bColor_Click"></Button>
-                    <Button Name="bYellow" Height="30" Background="Yellow" Click="bColor_Click"></Button>
-                    <Button Name="bBlue" Height="30" Background="Blue" Click="bColor_Click"></Button>
-                </StackPanel>
-                <StackPanel Width="60" >
-                    <Button Name="bGreen" Height="30" Background="Green" Click="bColor_Click"></Button>
-                    <Button Name="bBlack" Height="30" Background="Black" Click="bColor_Click"></Button>
-                    <Button Name="bWhite" Height="30" Background="White" Click="bColor_Click"></Button>
-                </StackPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File" >
+                    <MenuItem Name="saveMenuItem" Header="_Save" Click="saveMenuItem_Click"/>
+                </MenuItem>
+            </Menu>
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar Name="toolBar" >
+                    <Button Name="bUndo" Content="Cofnij" Width="60" Click="bUndo_Click"></Button>
+                    <Button Name="bRedo" Content="Powtórz" Width="60" Click="bRedo_Click"></Button>
+                    <Separator></Separator>
+                    <Button Name="testEffects" Content="Effect" Click="testEffects_Click" Visibility="Hidden" VerticalAlignment="Stretch"></Button>
+                </ToolBar>
+            </ToolBarTray>
+            <Border Padding="10" Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="90">
+                        <StackPanel Width="60" >
+                            <Button Name="bRed" Height="30" Background="Red" Click="bColor_Click"></Button>
+                            <Button Name="bYellow" Height="30" Background="Yellow" Click="bColor_Click"></Button>
+                            <Button Name="bBlue" Height="30" Background="Blue" Click="bColor_Click"></Button>
+                        </StackPanel>
+                        <StackPanel Width="60" >
+                            <Button Name="bGreen" Height="30" Background="Green" Click="bColor_Click"></Button>
+                            <Button Name="bBlack" Height="30" Background="Black" Click="bColor_Click"></Button>
+                            <Button Name="bWhite" Height="30" Background="White" Click="bColor_Click"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <Rectangle Name="rColor" Height="30">
+                    </Rectangle>
+                <Label FontWeight="Bold">R:</Label>
+                <Slider Name="sRed" Minimum="0" Maximum="255" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sColorSlider_ValueChanged" ></Slider>
+                <Label FontWeight="Bold">G:</Label>
+                <Slider Name="sGreen" Minimum="0" Maximum="255" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True"  ValueChanged="sColorSlider_ValueChanged" ></Slider>
+                <Label FontWeight="Bold">B:</Label>
+                <Slider Name="sBlue" Minimum="0" Maximum="255" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True"  ValueChanged="sColorSlider_ValueChanged" ></Slider>
+                <StackPanel Orientation="Horizontal" Height="30">
+                        <Button Name="bLine" Content="Line" Width="60" Click="bLine_Click" ></Button>
+                    <Button Name="bRect" Content="Rectangle" Width="60" Click="bRect_Click"></Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <Button Name="bElipse" Content="Ellipse" Width="60" Click="bElipse_Click" ></Button>
+                        <Button Name="bFill" Content="Fill" Width="60" Click="bFill_Click"  ></Button>
+                    </StackPanel>
+                    <CheckBox Name="cbFillShape" Content="Fill shape"></CheckBox>
+                    <Separator Height="20"></Separator>
+                    <Label  FontWeight="Bold">Line wight:</Label>
+                    <Slider Name="sBrushThickness" Minimum="1" Maximum="15" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sBrushThickness_ValueChanged"></Slider>
+                    <TextBox Name="tBrushThickness"  Text="{Binding ElementName=sBrushThickness,Path=Value}" IsEnabled="False"></TextBox>
+
+
             </StackPanel>
-            <Rectangle Name="rColor" Height="30">
-            </Rectangle>
-            <StackPanel Orientation="Horizontal" Height="30">
-                <Button Name="bLine" Content="Linia" Width="60" Click="bLine_Click" ></Button>
-                <Button Name="bRect" Content="Prostokąt" Width="60" Click="bRect_Click"></Button>
-            </StackPanel>
-            <Slider Name="sBrushThickness" Minimum="1" Maximum="15" TickPlacement="BottomRight" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="sBrushThickness_ValueChanged"></Slider>
-        </StackPanel>
-            
-            <Canvas Name="mainCanvas" MouseDown="mainCanvas_MouseDown" MouseMove="mainCanvas_MouseMove">
+            </Border>
+
+        <Canvas Name="mainCanvas" MouseDown="mainCanvas_MouseDown" MouseMove="mainCanvas_MouseMove">
             <Canvas.CacheMode>
                 <BitmapCache 
-                EnableClearType="False" 
-                SnapsToDevicePixels="False"
-                RenderAtScale="2"/>
+                    EnableClearType="False" 
+                    SnapsToDevicePixels="False"
+                    RenderAtScale="2"/>
             </Canvas.CacheMode>
         </Canvas>
-        </DockPanel>
+    </DockPanel>
 </Window>

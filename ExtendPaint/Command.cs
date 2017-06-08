@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
@@ -62,6 +63,31 @@ namespace ExtendPaint
             {
                 children.Effect = null;
             }
+        }
+    }
+
+    public class FillCommand : ICommand
+    {
+        private Brush previousBrush;
+        private Brush currentBrush;
+        private Canvas canvas;
+
+        public FillCommand(Brush brush, Canvas canvas)
+        {
+            this.currentBrush = brush;
+            this.canvas = canvas;
+        }
+
+        public void Execute()
+        {
+
+            previousBrush = canvas.Background;
+            canvas.Background = currentBrush;
+        }
+
+        public void UnExecute()
+        {
+            canvas.Background = previousBrush;
         }
     }
 }
